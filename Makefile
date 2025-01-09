@@ -19,6 +19,6 @@ LINKER_FLAGS=-lSDL2
 OBJ_NAME=prog
 
 all:$(OBJS)
-	$(CC) $(CFLAGS) $(LINKER_FLAGS) $(OBJS) -o $(OBJ_NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(OBJ_NAME) $(LINKER_FLAGS)
 clean:
 	rm -f $(OBJS)
