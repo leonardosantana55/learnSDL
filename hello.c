@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <stdbool.h>
-const int SCREEN_WIDTH = 640*2;
-const int SCREEN_HEIGHT = 480*2;
 
 // its a breeze building this program on linux or windows 
 #ifdef _WIN32
@@ -10,57 +8,10 @@ const int SCREEN_HEIGHT = 480*2;
 #elif __linux__
 #define XMAIN main
 #endif
-//
-//int XMAIN( int argc, char* args[] )
-//{
-//    //The window we'll be rendering to
-//    SDL_Window* window = NULL;
-//
-//    //The surface contained by the window
-//    SDL_Surface* screenSurface = NULL;
-//
-//    //Initialize SDL
-//    if( SDL_Init( SDL_INIT_VIDEO ) < 0 ){
-//        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-//    }
-//    else{
-//        //Create window
-//        window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-//        if( window == NULL ){
-//            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-//        }
-//        else{
-//            //Get window surface
-//            screenSurface = SDL_GetWindowSurface( window );
-//
-//            //Fill the surface white
-//            //SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
-//
-//            //Update the surface
-//            SDL_UpdateWindowSurface( window );
-//
-//            //Hack to get window to stay up
-//            SDL_Event e;
-//            bool quit = false;
-//            while(quit == false){
-//                while(SDL_PollEvent(&e)){
-//                    if(e.type == SDL_QUIT)
-//                        quit = true;
-//                }
-//            }
-//        }
-//    }
-//
-////Destroy window
-//    SDL_DestroyWindow( window );
-//
-//    //Quit SDL subsystems
-//    SDL_Quit();
-//
-//    return 0;
-//}
-//
 
+//Global variables
+const int SCREEN_WIDTH = 640*2;
+const int SCREEN_HEIGHT = 480*2;
 SDL_Window* gwindow = NULL;
 SDL_Surface* gwindow_surface = NULL;
 SDL_Surface* gimage_surface = NULL;
@@ -68,6 +19,7 @@ SDL_Surface* gimage_surface = NULL;
 
 bool initWindow(){
     bool success = true;
+
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ){
         printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
@@ -83,6 +35,7 @@ bool initWindow(){
             gwindow_surface = SDL_GetWindowSurface( gwindow );
         }
     }
+
     return success;
 }
 
@@ -117,11 +70,6 @@ void closeSDL(){
 
 
 int XMAIN(){
-    //global variables
-//    SDL_Window* gwindow = NULL;
-//    SDL_Surface* gwindow_surface = NULL;
-//    SDL_Surface* gimage_surface = NULL;
-
     initWindow();
     loadMedia();
     SDL_BlitSurface(gimage_surface, NULL, gwindow_surface, NULL);
@@ -137,8 +85,8 @@ int XMAIN(){
         }
 
     }
-    closeSDL();
 
+    closeSDL();
 }
 
 
