@@ -40,10 +40,10 @@ bool initWindow(){
 }
 
 
-bool loadMedia(){
+bool loadMedia(char* name){
     bool success = true;
 
-    gimage_surface = SDL_LoadBMP("hello.bmp");
+    gimage_surface = SDL_LoadBMP(name);
 
     if(gimage_surface == NULL){
         printf( "Unable to load image %s! SDL Error: %s\n",
@@ -71,22 +71,27 @@ void closeSDL(){
 
 int XMAIN(){
     initWindow();
-    loadMedia();
+
+    // main loop
+    bool quit = false;
+    SDL_Event e;
+
+    while(!quit){
+        //event loop
+        while(SDL_PollEvent(&e)){
+            if(e.type == SDL_TEXTINPUT){
+                printf("%s\n", e.text.text);
+            }
+            if(e.type == SDL_QUIT){
+                quit = true;
+            }
+        }
+    loadMedia("hello.bmp");
     SDL_BlitSurface(gimage_surface, NULL, gwindow_surface, NULL);
     SDL_UpdateWindowSurface(gwindow);
-
-    //Hack to get window to stay up
-    SDL_Event e;
-    bool quit = false;
-    while(quit == false){
-        while(SDL_PollEvent(&e)){
-            if(e.type == SDL_QUIT)
-                quit = true;
-        }
-
     }
 
     closeSDL();
 }
 
-
+//Todo: create an function to handle the event logic
