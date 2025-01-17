@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <stdbool.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 // its a breeze building this program on linux or windows 
 #ifdef _WIN32
@@ -8,6 +11,20 @@
 #elif __linux__
 #define XMAIN main
 #endif
+
+enum AllImages{
+    IMAGEM_DEFAULT,
+    IMAGEM_UP,
+    IMAGEM_DOWN,
+    IMAGEM_TOTAL
+};
+
+char *image_name[IMAGEM_TOTAL] = {
+"hello.bmp",
+"hello_up.bmp",
+"hello_down.bmp"
+};
+
 
 //Global variables
 const int SCREEN_WIDTH = 640*2;
@@ -17,7 +34,7 @@ SDL_Surface* gwindow_surface = NULL;
 SDL_Surface* gimage_surface = NULL;
 
 
-bool initWindow(){
+bool initSDL(){
     bool success = true;
 
     //Initialize SDL
@@ -43,15 +60,52 @@ bool initWindow(){
 bool loadMedia(char* name){
     bool success = true;
 
-    gimage_surface = SDL_LoadBMP(name);
+    SDL_Surface* temp_surface = SDL_LoadBMP(name);
+
+    gimage_surface = SDL_ConvertSurface(temp_surface, gwindow_surface->format, 0);
+    
+    SDL_FreeSurface(temp_surface);
 
     if(gimage_surface == NULL){
         printf( "Unable to load image %s! SDL Error: %s\n",
-        "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError() );
+        name, SDL_GetError() );
         success = false;
     }
 
     return success;
+}
+
+void keyPressEventLogic(SDL_Event* e, bool* quit){
+    while(SDL_PollEvent(e)){
+        if(e->type == SDL_TEXTINPUT){
+            printf("%s\n", e->text.text);
+        }
+
+        if( e->type == SDL_KEYDOWN ){
+            //Select surfaces based on key press
+            switch( e->key.keysym.sym ){
+                case SDLK_UP:
+                loadMedia(image_name[IMAGEM_UP]);
+                break;
+
+                case SDLK_DOWN:
+                loadMedia(image_name[IMAGEM_DOWN]);
+                break;
+
+                default:
+                loadMedia(image_name[IMAGEM_DEFAULT]);
+                break;
+
+            }
+
+        }
+
+        if(e->type == SDL_QUIT){
+            *quit = true;
+        }
+
+    }
+
 }
 
 
@@ -70,25 +124,20 @@ void closeSDL(){
 
 
 int XMAIN(){
-    initWindow();
+    initSDL();
+    SDL_Event e;
 
     // main loop
     bool quit = false;
-    SDL_Event e;
-
     while(!quit){
-        //event loop
-        while(SDL_PollEvent(&e)){
-            if(e.type == SDL_TEXTINPUT){
-                printf("%s\n", e.text.text);
-            }
-            if(e.type == SDL_QUIT){
-                quit = true;
-            }
-        }
-    loadMedia("hello.bmp");
-    SDL_BlitSurface(gimage_surface, NULL, gwindow_surface, NULL);
-    SDL_UpdateWindowSurface(gwindow);
+        keyPressEventLogic(&e, &quit);
+        SDL_Rect stretchRect;
+        stretchRect.x = 0;
+        stretchRect.y = 0;
+        stretchRect.w = SCREEN_WIDTH;
+        stretchRect.h = SCREEN_HEIGHT;
+        SDL_BlitScaled(gimage_surface, NULL, gwindow_surface, &stretchRect);
+        SDL_UpdateWindowSurface(gwindow);
     }
 
     closeSDL();
