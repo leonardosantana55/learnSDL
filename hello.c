@@ -57,56 +57,97 @@ bool initSDL(){
 }
 
 
-bool loadMedia(char* name){
+bool loadMedia(char* name, SDL_Surface** surface){
     bool success = true;
 
     SDL_Surface* temp_surface = SDL_LoadBMP(name);
 
-    gimage_surface = SDL_ConvertSurface(temp_surface, gwindow_surface->format, 0);
+    *surface = SDL_ConvertSurface(temp_surface, gwindow_surface->format, 0);
     
     SDL_FreeSurface(temp_surface);
 
-    if(gimage_surface == NULL){
+    if(surface == NULL){
         printf( "Unable to load image %s! SDL Error: %s\n",
         name, SDL_GetError() );
         success = false;
     }
-
     return success;
 }
 
-void keyPressEventLogic(SDL_Event* e, bool* quit){
-    while(SDL_PollEvent(e)){
-        if(e->type == SDL_TEXTINPUT){
-            printf("%s\n", e->text.text);
-        }
+// Acho que a maneira correta de organizar a lógica de eventos é recebendo como parametro
+// o objeto que será modificado pelo evento. E talvez a flag quit deve estar em um função
+//separada.
 
-        if( e->type == SDL_KEYDOWN ){
-            //Select surfaces based on key press
-            switch( e->key.keysym.sym ){
-                case SDLK_UP:
-                loadMedia(image_name[IMAGEM_UP]);
-                break;
+void eventLogicImageLoad(SDL_Event* e, SDL_Surface** surface){
+    if( e->type == SDL_KEYDOWN ){
+        //Select surfaces based on key press
+        switch( e->key.keysym.sym ){
+            case SDLK_UP:
+            loadMedia(image_name[IMAGEM_UP], surface);
+            break;
 
-                case SDLK_DOWN:
-                loadMedia(image_name[IMAGEM_DOWN]);
-                break;
+            case SDLK_DOWN:
+            loadMedia(image_name[IMAGEM_DOWN], surface);
+            break;
 
-                default:
-                loadMedia(image_name[IMAGEM_DEFAULT]);
-                break;
+            default:
+            loadMedia(image_name[IMAGEM_DEFAULT], surface);
+            break;
 
-            }
-
-        }
-
-        if(e->type == SDL_QUIT){
-            *quit = true;
         }
 
     }
 
 }
+
+
+void eventLogicQuit(SDL_Event* e, bool* quit){
+    if(e->type == SDL_QUIT){
+        *quit = true;
+    }
+
+}
+
+
+void eventLogicKeyPrint(SDL_Event* e){
+    if(e->type == SDL_TEXTINPUT){
+        printf("%s\n", e->text.text);
+    }
+}
+
+
+//void keyPressEventLogic(SDL_Event* e, bool* quit){
+//    while(SDL_PollEvent(e)){
+//        if(e->type == SDL_TEXTINPUT){
+//            printf("%s\n", e->text.text);
+//        }
+//
+//        if( e->type == SDL_KEYDOWN ){
+//            //Select surfaces based on key press
+//            switch( e->key.keysym.sym ){
+//                case SDLK_UP:
+//                loadMedia(image_name[IMAGEM_UP]);
+//                break;
+//
+//                case SDLK_DOWN:
+//                loadMedia(image_name[IMAGEM_DOWN]);
+//                break;
+//
+//                default:
+//                loadMedia(image_name[IMAGEM_DEFAULT]);
+//                break;
+//
+//            }
+//
+//        }
+//
+//        if(e->type == SDL_QUIT){
+//            *quit = true;
+//        }
+//
+//    }
+//
+//}
 
 
 void closeSDL(){
@@ -126,17 +167,28 @@ void closeSDL(){
 int XMAIN(){
     initSDL();
     SDL_Event e;
+    SDL_Surface* image_surface = NULL;
 
     // main loop
     bool quit = false;
     while(!quit){
-        keyPressEventLogic(&e, &quit);
+//        keyPressEventLogic(&e, &quit);
+        // event logic loop
+        while(SDL_PollEvent(&e)){
+            eventLogicQuit(&e, &quit);
+            eventLogicImageLoad(&e, &image_surface);
+            eventLogicKeyPrint(&e);
+            }
+
+//        loadMedia(image_name[IMAGEM_DEFAULT], image_surface);
+
         SDL_Rect stretchRect;
         stretchRect.x = 0;
         stretchRect.y = 0;
         stretchRect.w = SCREEN_WIDTH;
         stretchRect.h = SCREEN_HEIGHT;
-        SDL_BlitScaled(gimage_surface, NULL, gwindow_surface, &stretchRect);
+        printf("%s", image_surface);
+        SDL_BlitScaled(image_surface, NULL, gwindow_surface, &stretchRect);
         SDL_UpdateWindowSurface(gwindow);
     }
 
