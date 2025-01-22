@@ -15,7 +15,7 @@ CC=gcc
 #CFLAGS=-g -D__USE_FIXED_PROTOTYPES__ -ansi
 # OBJS: All the files to be compiled:
 OBJS=hello.c
-LINKER_FLAGS=-lSDL2
+LINKER_FLAGS=-lSDL2 -Wall
 OBJ_NAME=prog
 
 all:$(OBJS)
