@@ -14,11 +14,12 @@
 CC=gcc
 #CFLAGS=-g -D__USE_FIXED_PROTOTYPES__ -ansi
 # OBJS: All the files to be compiled:
-OBJS=hello.c
-LINKER_FLAGS=-lSDL2 -Wall
+OBJS=snake.c
+LINKER_FLAGS=-lSDL2 -lSDL2_image -Wall
+LIBRARY_PATHS =-LC:\Users\XQ6460\Downloads\c\mingw64\x86_64-w64-mingw32\lib
 OBJ_NAME=prog
 
 all:$(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(OBJ_NAME) $(LINKER_FLAGS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(OBJ_NAME) $(LIBRARY_PATHS) $(LINKER_FLAGS)
 clean:
 	rm -f $(OBJS)

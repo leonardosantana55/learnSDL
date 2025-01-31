@@ -32,6 +32,7 @@ const int SCREEN_HEIGHT = 480*2;
 SDL_Window* gwindow = NULL;
 SDL_Surface* gwindow_surface = NULL;
 SDL_Renderer* gRenderer = NULL;
+SDL_Texture* gTexture = NULL;
 
 bool initSDL(){
     bool success = true;
@@ -47,16 +48,24 @@ bool initSDL(){
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
         }
         else{
-            //Initialize PNG loading
-            int imgFlags = IMG_INIT_PNG;
-            if( !( IMG_Init( imgFlags ) & imgFlags ) )
-            {
-                printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+            //Create renderer for window
+            gRenderer = SDL_CreateRenderer( gwindow, -1, SDL_RENDERER_ACCELERATED );
+            if( gRenderer == NULL ){
+                printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
                 success = false;
             }
-            else
-            //Get window surface
-            gwindow_surface = SDL_GetWindowSurface( gwindow );
+            else{
+                //Initialize PNG loading
+                int imgFlags = IMG_INIT_PNG;
+                if( !( IMG_Init( imgFlags ) & imgFlags ) ){
+                    printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+                    success = false;
+                }
+                else{
+                    //Get window surface
+                    gwindow_surface = SDL_GetWindowSurface( gwindow );
+                }
+            }
         }
     }
 
@@ -127,10 +136,10 @@ void eventLogicKeyPrint(SDL_Event* e){
 }
 
 
-void closeSDL(SDL_Surface** surface){
+void closeSDL(){
     //Dealocate Surface
-    SDL_FreeSurface(*surface);
-    *surface = NULL;
+//    SDL_FreeSurface(*surface);
+//    *surface = NULL;
 
     //Destroy window
     SDL_DestroyWindow(gwindow);
@@ -144,7 +153,6 @@ void closeSDL(SDL_Surface** surface){
 int XMAIN(){
     initSDL();
     SDL_Event e;
-    SDL_Surface* image_surface = NULL;
 
     // main loop
     bool quit = false;
@@ -153,17 +161,23 @@ int XMAIN(){
         // event logic loop
         while(SDL_PollEvent(&e)){
             eventLogicQuit(&e, &quit);
-            eventLogicImageLoad(&e, &image_surface);
             eventLogicKeyPrint(&e);
-            }
-        // rendering section
-        SDL_Rect stretchRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-        SDL_BlitScaled(image_surface, NULL, gwindow_surface, &stretchRect);
+        }
 
-        SDL_UpdateWindowSurface(gwindow);
+        //Clear screen
+        SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0x00 );
+        SDL_RenderClear( gRenderer );
+
+        //Render red filled quad
+        SDL_Rect fillRect = { SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
+        SDL_SetRenderDrawColor( gRenderer, 0xFF, 0x00, 0x00, 0xFF );        
+        SDL_RenderFillRect( gRenderer, &fillRect );
+
+        //Update screen
+        SDL_RenderPresent( gRenderer );
     }
 
-    closeSDL(&image_surface);
+    closeSDL();
     return 0;
 }
 
