@@ -178,14 +178,14 @@ void closeSDL(){
 //        printf("\n");
 //    }
 
-void renderBoard(){
+void renderBoard(int board_size_x, int board_size_y, SDL_Rect board[static board_size_x][board_size_y]){
     //TODO: insert parameters in this function. it has to receive a pointer to an array o SDL_Rect
     //and is size
-    int board_size_x = 10;
-    int board_size_y = 10;
-    SDL_Rect board[board_size_x][board_size_y] = {};
+//    int board_size_x = 10;
+//    int board_size_y = 10;
+//    SDL_Rect board[board_size_x][board_size_y] = {};
     
-    // All the other cells as based on the starting position of a1
+    // All the other cells are based on the starting position of a1
     int cell_x = 300;
     int cell_y = 300;
     int cell_w = 15;
@@ -201,7 +201,7 @@ void renderBoard(){
 
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderFillRect(gRenderer, &board[i][j]);
-            SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+            SDL_SetRenderDrawColor(gRenderer, 0xF0, 0xF0, 0xF0, 0xF0);
             SDL_RenderDrawRect(gRenderer, &board[i][j]);
         }
     }
@@ -218,6 +218,9 @@ int XMAIN(){
     SDL_Rect dstrect = {100,100,100,100};
 
 
+    int board_size_x = 10;
+    int board_size_y = 10;
+    SDL_Rect board[board_size_x][board_size_y] = {};
 
     // main loop
     bool quit = false;
@@ -236,7 +239,7 @@ int XMAIN(){
         //Render texture
         SDL_RenderCopy( gRenderer, gTexture, &srcrect, &dstrect);
 
-        renderBoard();
+        renderBoard(board_size_x, board_size_y, board);
 
         //Render black filled quad
         SDL_Rect fill_rect = {200,200,25,25};
