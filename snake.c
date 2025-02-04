@@ -179,9 +179,13 @@ void closeSDL(){
 //    }
 
 void renderBoard(){
+    //TODO: insert parameters in this function. it has to receive a pointer to an array o SDL_Rect
+    //and is size
     int board_size_x = 10;
     int board_size_y = 10;
     SDL_Rect board[board_size_x][board_size_y] = {};
+    
+    // All the other cells as based on the starting position of a1
     int cell_x = 300;
     int cell_y = 300;
     int cell_w = 15;
