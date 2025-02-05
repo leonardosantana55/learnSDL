@@ -37,8 +37,8 @@
 
 
 //Global variables
-const int SCREEN_WIDTH = 640*2;
-const int SCREEN_HEIGHT = 480*2;
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 600;
 SDL_Window* gWindow = NULL;
 SDL_Surface* gWindow_surface = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -178,19 +178,13 @@ void closeSDL(){
 //        printf("\n");
 //    }
 
-void renderBoard(int board_size_x, int board_size_y, SDL_Rect board[static board_size_x][board_size_y]){
-    //TODO: insert parameters in this function. it has to receive a pointer to an array o SDL_Rect
-    //and is size
-//    int board_size_x = 10;
-//    int board_size_y = 10;
-//    SDL_Rect board[board_size_x][board_size_y] = {};
-    
+void initBoard(int board_size_x, int board_size_y, SDL_Rect board[static board_size_x][board_size_y]){
     // All the other cells are based on the starting position of a1
-    int cell_x = 300;
-    int cell_y = 300;
-    int cell_w = 15;
-    int cell_h = 15;
-    SDL_Rect a1 = {cell_x, cell_y, cell_w, cell_h};
+    int cell_x = 0;
+    int cell_y = 0;
+    int cell_w = SCREEN_WIDTH / board_size_x;
+    int cell_h = SCREEN_HEIGHT / board_size_y;
+    SDL_Rect a1 = {cell_x - cell_w, cell_y - cell_h, cell_w, cell_h};
 
     for(int i=0; i<board_size_x; i++){
         for(int j=0; j<board_size_y; j++){
@@ -199,6 +193,14 @@ void renderBoard(int board_size_x, int board_size_y, SDL_Rect board[static board
             board[i][j].w = a1.w;
             board[i][j].h = a1.h;
 
+        }
+    }
+}
+
+
+void renderBoard(int board_size_x, int board_size_y, SDL_Rect board[static board_size_x][board_size_y]){
+    for(int i=0; i<board_size_x; i++){
+        for(int j=0; j<board_size_y; j++){
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
             SDL_RenderFillRect(gRenderer, &board[i][j]);
             SDL_SetRenderDrawColor(gRenderer, 0xF0, 0xF0, 0xF0, 0xF0);
@@ -208,19 +210,20 @@ void renderBoard(int board_size_x, int board_size_y, SDL_Rect board[static board
 }
 
 
+void initSnake(){
+    
+}
+
+
 int XMAIN(){
     initSDL();
     SDL_Event e;
-    gTexture = loadTexture("hello.bmp");
-    //Select the portion of the source image to be used
-    SDL_Rect srcrect = {50,50,50,50};
-    //The rectangle to be rendered to
-    SDL_Rect dstrect = {100,100,100,100};
 
-
-    int board_size_x = 10;
-    int board_size_y = 10;
+    // init board
+    int board_size_x = 50;
+    int board_size_y = 50;
     SDL_Rect board[board_size_x][board_size_y] = {};
+    initBoard(board_size_x, board_size_y, board);
 
     // main loop
     bool quit = false;
@@ -236,24 +239,10 @@ int XMAIN(){
         SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0x00 );
         SDL_RenderClear( gRenderer );
 
-        //Render texture
-        SDL_RenderCopy( gRenderer, gTexture, &srcrect, &dstrect);
 
+        // render game elements
         renderBoard(board_size_x, board_size_y, board);
 
-        //Render black filled quad
-        SDL_Rect fill_rect = {200,200,25,25};
-        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderFillRect(gRenderer, &fill_rect);
-        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-        SDL_RenderDrawRect(gRenderer, &fill_rect);
-
-        //Render black filled quad
-        SDL_Rect fill_rect2 = {fill_rect.x, fill_rect.y + fill_rect.h, fill_rect.h, fill_rect.w};
-        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-        SDL_RenderFillRect(gRenderer, &fill_rect2);
-        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-        SDL_RenderDrawRect(gRenderer, &fill_rect2);
 
         //Update screen
         SDL_RenderPresent( gRenderer );
@@ -262,5 +251,3 @@ int XMAIN(){
     closeSDL();
     return 0;
 }
-
-//TODO: create a function that renders a 2d board
