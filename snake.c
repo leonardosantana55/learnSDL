@@ -251,3 +251,7 @@ int XMAIN(){
     closeSDL();
     return 0;
 }
+
+
+// TODO: testar modificar os parametros da função initBoard e renderBoard pra receberem ponteiros em
+// vez de array
