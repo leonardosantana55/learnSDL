@@ -170,14 +170,6 @@ void closeSDL(){
 }
 
 
-//    int board_size[10][10] = {0};
-//    for(int i = 0; i<10; i++){
-//        for(int j = 0; j<10; j++){
-//            printf("%d", board_size[i][j]);
-//        }
-//        printf("\n");
-//    }
-
 void initBoard(int board_size_x, int board_size_y, SDL_Rect board[static board_size_x][board_size_y]){
     // All the other cells are based on the starting position of a1
     int cell_x = 0;
@@ -224,6 +216,7 @@ int XMAIN(){
     int board_size_y = 50;
     SDL_Rect board[board_size_x][board_size_y] = {};
     initBoard(board_size_x, board_size_y, board);
+
 
     // main loop
     bool quit = false;
