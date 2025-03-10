@@ -30,6 +30,12 @@ int main(){
 
     LinkedList_Insert(mylist, middle, &testarray[9]);
 
+    LinkedList_Remove(mylist, NULL);
+    LinkedList_Remove(mylist, NULL);
+    LinkedList_Remove(mylist, NULL);
+    LinkedList_Remove(mylist, NULL);
+    LinkedList_Remove(mylist, NULL);
+
     //print list
     printf("size: %d\n", mylist->size);
 

@@ -22,8 +22,7 @@ int LinkedList_Insert(LinkedList *list, Node *node, const void *data);
 //
 //int LinkedList_Prepend(LinkedList *list, const void *data);
 //
-//int LinkedList_Remove(LinkedList *list, const void *data);
-
+int LinkedList_Remove(LinkedList *list, Node *node);
 
 
 #endif
