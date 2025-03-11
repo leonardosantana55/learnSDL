@@ -30,11 +30,19 @@ int main(){
 
     LinkedList_Insert(mylist, middle, &testarray[9]);
 
-    LinkedList_Remove(mylist, NULL);
-    LinkedList_Remove(mylist, NULL);
-    LinkedList_Remove(mylist, NULL);
-    LinkedList_Remove(mylist, NULL);
-    LinkedList_Remove(mylist, NULL);
+    float *removed = (float *)malloc(sizeof(float));
+    LinkedList_Remove(mylist, NULL, (void **)&removed);
+    printf("removed: %.2f\n", *removed);
+
+    LinkedList_Remove(mylist, NULL, (void **)&removed);
+    printf("removed: %.2f\n", *removed);
+
+    LinkedList_Remove(mylist, NULL, (void **)&removed);
+    printf("removed: %.2f\n", *removed);
+
+    LinkedList_Remove(mylist, NULL, (void **)&removed);
+    printf("removed: %.2f\n", *removed);
+
 
     //print list
     printf("size: %d\n", mylist->size);
@@ -55,4 +63,4 @@ int main(){
 }
 
 
-// TODO: create a function for popping and for removing based on index or address
+// TODO: test remove function more

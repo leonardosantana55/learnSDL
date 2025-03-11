@@ -17,13 +17,20 @@ int stringLength(String *self){
 
 }
 
-String *initString(int n){
+String *initString(char input[]){
+
+    /* gets the input length */
+    int i = 0;
+    while(input[i] != '\0'){
+        i++;
+    }
+    int n = i;
 
     String *str = malloc(sizeof(String));
     str->string = malloc(sizeof(char) * n);
     str->length = stringLength;
 
-    str->string[0] = '\0';
+    strcpy(str->string, input);
 
     return str;
 
@@ -32,9 +39,9 @@ String *initString(int n){
 
 int main(){
 
-    String *mystring = initString(50);
-    strcpy(mystring->string, "Leonardo, Joao Gabriel, Arthur, Gabriela");
-    printf("\n%d", mystring->length(mystring));
+    String *mystring = initString("love my family");
+    printf("%d\n", mystring->length(mystring));
+    printf("%s\n", mystring->string);
 
     return 0;
 
