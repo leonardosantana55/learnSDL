@@ -201,11 +201,52 @@ void renderBoard(int board_size_x, int board_size_y, SDL_Rect board[static board
     }
 }
 
+//TODO: before i can create a snake i need a field where i can put it. create a struct for the board
 
-void initSnake(){
-    
-}
-
+//typedef struct _Snake{
+//
+//    SDL_Rect body[10];
+//
+//    SDL_Rect board[][];
+//
+//    int min_size;
+//    int current_size;
+//    int max_size;
+//
+//    int start_pos_x;
+//    int start_pos_y;
+//
+//    int min_speed;
+//    int max_speed;
+//} Snake;
+//
+//
+//void initSnake(Snake *snake, SDL_Rect board){
+//
+//    int cell_x = 0;
+//    int cell_y = 0;
+//    int cell_w = SCREEN_WIDTH / board_size_x;
+//    int cell_h = SCREEN_HEIGHT / board_size_y;
+//
+//    
+//    snake->min_size = 3;
+//    int current_size = min_size;
+//    snake->max_size = sizeof(snake->body) / sizeof(snake->body[0]);
+//
+//    snake->start_pos_x = 3;
+//    snake->start_pos_y = 3;
+//
+//    int min_speed = 3;
+//    int max_speed = 3;
+//
+//}
+//
+//void renderSnake(Snake *snake){
+//    
+//    for (int i=0; i<snake->current_size; i++){
+//        
+//    }
+//}
 
 int XMAIN(){
     initSDL();
