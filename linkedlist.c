@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "mylist.h"
+#include "linkedlist.h"
 
 
 /******************************************************************************
