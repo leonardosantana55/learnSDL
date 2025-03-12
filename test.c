@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "mylist.h"
+
 
 int main(){
 
@@ -59,8 +61,8 @@ int main(){
     printf("tail: %.2f\n", *(float *)mylist->tail->data);
     printf("head: %.2f\n", *(float *)mylist->head->data);
 
+
+    LinkedList_Destroy(mylist);
+
     return 0;
 }
-
-
-// TODO: test remove function more

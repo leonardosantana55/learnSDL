@@ -1,10 +1,9 @@
 #ifndef MY_LIST
 #define MYLIST
 
-#include <stdlib.h>
 
 typedef struct Node_{
-    
+
     void *data;
     struct Node_ *next;
 
@@ -19,14 +18,15 @@ typedef struct LinkedList_{
 } LinkedList;
 
 /******************************************************************************
-                                      API
+                               Public interface
 ******************************************************************************/
 
 void LinkedList_Init(LinkedList *list);
 
+void LinkedList_Destroy(LinkedList *list);
+
 int LinkedList_Insert(LinkedList *list, Node *node, const void *data);
 
 int LinkedList_Remove(LinkedList *list, Node *node, void **data);
-
 
 #endif

@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 #include "mylist.h"
 
@@ -137,4 +139,28 @@ int LinkedList_Remove(LinkedList *list, Node *node, void **data){
     list->size--;
 
     return 0;
+}
+
+
+/******************************************************************************
+*Function Description:
+
+Simply pass a linked list and voila :)
+
+******************************************************************************/
+void LinkedList_Destroy(LinkedList *list){
+
+    void *removed;
+
+    int count = 0;
+    while(list->size > 0){
+
+        LinkedList_Remove(list, NULL, (void **)&removed);
+        count++;
+
+    }
+
+    printf("%d items removed, list destroyed\n", count);
+
+    memset(list, 0, sizeof(LinkedList));
 }
