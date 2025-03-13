@@ -28,6 +28,8 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "enteties.c"
+
 // its a breeze building this program on linux or windows 
 #ifdef _WIN32
 #define XMAIN WinMain
@@ -170,93 +172,48 @@ void closeSDL(){
 }
 
 
-void initBoard(int board_size_x, int board_size_y, SDL_Rect board[static board_size_x][board_size_y]){
-    // All the other cells are based on the starting position of a1
-    int cell_x = 0;
-    int cell_y = 0;
-    int cell_w = SCREEN_WIDTH / board_size_x;
-    int cell_h = SCREEN_HEIGHT / board_size_y;
-    SDL_Rect a1 = {cell_x - cell_w, cell_y - cell_h, cell_w, cell_h};
-
-    for(int i=0; i<board_size_x; i++){
-        for(int j=0; j<board_size_y; j++){
-            board[i][j].x = a1.x + (a1.w * (j+1));
-            board[i][j].y = a1.y + (a1.h * (i+1));
-            board[i][j].w = a1.w;
-            board[i][j].h = a1.h;
-
-        }
-    }
-}
-
-
-void renderBoard(int board_size_x, int board_size_y, SDL_Rect board[static board_size_x][board_size_y]){
-    for(int i=0; i<board_size_x; i++){
-        for(int j=0; j<board_size_y; j++){
+void renderField(Field *field){
+    
+    for(int i=0; i<field->size_x; i++){
+        for(int j=0; j<field->size_y; j++){
             SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-            SDL_RenderFillRect(gRenderer, &board[i][j]);
+            SDL_RenderFillRect(gRenderer, &field->tiles[i][j]);
             SDL_SetRenderDrawColor(gRenderer, 0xF0, 0xF0, 0xF0, 0xF0);
-            SDL_RenderDrawRect(gRenderer, &board[i][j]);
+            SDL_RenderDrawRect(gRenderer, &field->tiles[i][j]);
         }
+    }
+
+}
+
+
+void renderSnake(Snake *snake){
+
+    for(int i=0; i<snake->size; i++){
+        SDL_SetRenderDrawColor(gRenderer, 0x50, 0x50, 0x50, 0x50);
+        SDL_RenderFillRect(gRenderer, &snake->tiles[i]);
+        SDL_SetRenderDrawColor(gRenderer, 0xF0, 0xF0, 0xF0, 0xF0);
+        SDL_RenderDrawRect(gRenderer, &snake->tiles[i]);
     }
 }
 
-//TODO: before i can create a snake i need a field where i can put it. create a struct for the board
-
-//typedef struct _Snake{
-//
-//    SDL_Rect body[10];
-//
-//    SDL_Rect board[][];
-//
-//    int min_size;
-//    int current_size;
-//    int max_size;
-//
-//    int start_pos_x;
-//    int start_pos_y;
-//
-//    int min_speed;
-//    int max_speed;
-//} Snake;
-//
-//
-//void initSnake(Snake *snake, SDL_Rect board){
-//
-//    int cell_x = 0;
-//    int cell_y = 0;
-//    int cell_w = SCREEN_WIDTH / board_size_x;
-//    int cell_h = SCREEN_HEIGHT / board_size_y;
-//
-//    
-//    snake->min_size = 3;
-//    int current_size = min_size;
-//    snake->max_size = sizeof(snake->body) / sizeof(snake->body[0]);
-//
-//    snake->start_pos_x = 3;
-//    snake->start_pos_y = 3;
-//
-//    int min_speed = 3;
-//    int max_speed = 3;
-//
-//}
-//
-//void renderSnake(Snake *snake){
-//    
-//    for (int i=0; i<snake->current_size; i++){
-//        
-//    }
-//}
 
 int XMAIN(){
     initSDL();
     SDL_Event e;
 
-    // init board
-    int board_size_x = 50;
-    int board_size_y = 50;
-    SDL_Rect board[board_size_x][board_size_y] = {};
-    initBoard(board_size_x, board_size_y, board);
+
+    // init game enteties
+    Field *field = (Field *)malloc(sizeof(Field));
+    if(field == NULL){
+        return -1;
+    }
+    Field_Init(field, 32, 32);
+
+    Snake *snake = (Snake *)malloc(sizeof(Field));
+    if(snake == NULL){
+        return -1;
+    }
+    Snake_Init(snake, field);
 
 
     // main loop
@@ -275,7 +232,8 @@ int XMAIN(){
 
 
         // render game elements
-        renderBoard(board_size_x, board_size_y, board);
+        renderField(field);
+        renderSnake(snake);
 
 
         //Update screen
@@ -286,6 +244,4 @@ int XMAIN(){
     return 0;
 }
 
-
-// TODO: testar modificar os parametros da função initBoard e renderBoard pra receberem ponteiros em
-// vez de array
+// TODO: criar função para mover snake
