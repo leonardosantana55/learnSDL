@@ -27,6 +27,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+#include <math.h>
 
 #include "enteties.c"
 
@@ -41,6 +42,7 @@
 //Global variables
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 600;
+const int FRAME_RATE = 1000 / 60; //provavelmente essa porra ta errada pq noa é int
 SDL_Window* gWindow = NULL;
 SDL_Surface* gWindow_surface = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -219,6 +221,7 @@ int XMAIN(){
     // main loop
     bool quit = false;
     while(!quit){
+        int ticks_start = SDL_GetTicks();
 
         // event logic loop
         while(SDL_PollEvent(&e)){
@@ -238,6 +241,17 @@ int XMAIN(){
 
         //Update screen
         SDL_RenderPresent( gRenderer );
+
+
+        // control frame rate
+        int ticks_end = SDL_GetTicks();
+        int frame_duration = ticks_end - ticks_start;
+
+        if(frame_duration < FRAME_RATE){
+            SDL_Delay(FRAME_RATE - frame_duration);
+        }
+        SDL_Log("%d", frame_duration);
+
     }
 
     closeSDL();
