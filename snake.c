@@ -30,6 +30,7 @@
 #include <math.h>
 
 #include "enteties.c"
+#include "utils.c"
 
 // its a breeze building this program on linux or windows 
 #ifdef _WIN32
@@ -218,10 +219,20 @@ int XMAIN(){
     Snake_Init(snake, field);
 
 
+    //init game utils
+    Fps *fps = (Fps *)malloc(sizeof(Fps));
+    if(field == NULL){
+        return -1;
+    }
+    Fps_Init(fps);
+
+
     // main loop
     bool quit = false;
     while(!quit){
-        int ticks_start = SDL_GetTicks();
+//        Uint32 ticks_start = SDL_GetTicks();
+        fps->time_start = SDL_GetTicks();
+
 
         // event logic loop
         while(SDL_PollEvent(&e)){
@@ -244,13 +255,14 @@ int XMAIN(){
 
 
         // control frame rate
-        int ticks_end = SDL_GetTicks();
-        int frame_duration = ticks_end - ticks_start;
+//        SDL_Delay(1000);
+//        Uint32 ticks_end = SDL_GetTicks();
+//        Uint32 frame_duration = ticks_end - ticks_start;
+        Fps_Measure(fps);
+//        printf("frames: %d, time: %d\n", fps->frames, fps->timer);
+        printf("%d\n", fps->surplus);
 
-        if(frame_duration < FRAME_RATE){
-            SDL_Delay(FRAME_RATE - frame_duration);
-        }
-        SDL_Log("%d", frame_duration);
+
 
     }
 

@@ -37,5 +37,7 @@ void Field_Init(Field *field, int size_x, int size_y);
 
 void Snake_Init(Snake *snake, Field *field);
 
+void Snake_Move(Snake *snake);
+
 
 #endif
