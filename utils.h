@@ -10,7 +10,7 @@ typedef struct Fps_{
     Uint32 frames;
     double fps;
     Uint32 desired_fps;
-    Uint32 surplus;
+    int surplus;
 } Fps;
 
 

@@ -258,9 +258,14 @@ int XMAIN(){
 //        SDL_Delay(1000);
 //        Uint32 ticks_end = SDL_GetTicks();
 //        Uint32 frame_duration = ticks_end - ticks_start;
-        Fps_Measure(fps);
 //        printf("frames: %d, time: %d\n", fps->frames, fps->timer);
-        printf("%d\n", fps->surplus);
+//        printf("elapsed: %d\n", fps->elapsed);
+
+
+
+        Fps_Measure(fps);
+        printf("surplus: %d\n", fps->surplus);
+        printf("fps: %.2f\n", fps->fps);
 
 
 
