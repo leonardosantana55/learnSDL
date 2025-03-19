@@ -29,7 +29,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <math.h>
 
-#include "enteties.c"
+#include "enteties.c" //change to ententies.H
 #include "utils.c"
 
 // its a breeze building this program on linux or windows 
@@ -43,7 +43,6 @@
 //Global variables
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 600;
-const int FRAME_RATE = 1000 / 60; //provavelmente essa porra ta errada pq noa é int
 SDL_Window* gWindow = NULL;
 SDL_Surface* gWindow_surface = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -226,6 +225,8 @@ int XMAIN(){
     }
     Fps_Init(fps);
 
+    int control = 0; // quick hack
+
 
     // main loop
     bool quit = false;
@@ -239,6 +240,32 @@ int XMAIN(){
             eventLogicQuit(&e, &quit);
             eventLogicKeyPrint(&e);
         }
+
+        //game logic
+        if(control > 60){
+            Snake_Move(snake, DOWN);
+            control = 0;
+
+            for(int i=0; i<field->size_x; i++){
+                for(int j=0; j<field->size_y; j++){
+
+                   printf("%d", field->on_tile[i][j]);
+
+                }
+                printf("\n");
+            }
+        }
+        else{
+            control++;
+        }
+
+        Field_Update(field);
+
+
+//        int a = field->snakes_on_field[0]->tiles[1].y / field->tile_h;
+//        int b = field->snakes_on_field[0]->tiles[1].x / field->tile_w;
+//        printf("a: %d, b: %d\n", a,b);
+//        printf("%d", field->on_tile[a][b]);
 
         //Clear screen
         SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0x00 );
@@ -255,17 +282,9 @@ int XMAIN(){
 
 
         // control frame rate
-//        SDL_Delay(1000);
-//        Uint32 ticks_end = SDL_GetTicks();
-//        Uint32 frame_duration = ticks_end - ticks_start;
-//        printf("frames: %d, time: %d\n", fps->frames, fps->timer);
-//        printf("elapsed: %d\n", fps->elapsed);
-
-
 
         Fps_Measure(fps);
-        printf("surplus: %d\n", fps->surplus);
-        printf("fps: %.2f\n", fps->fps);
+//        printf("fps: %.2f\n", fps->fps);
 
 
 
