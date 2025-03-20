@@ -246,14 +246,14 @@ int XMAIN(){
             Snake_Move(snake, DOWN);
             control = 0;
 
-            for(int i=0; i<field->size_x; i++){
-                for(int j=0; j<field->size_y; j++){
-
-                   printf("%d", field->on_tile[i][j]);
-
-                }
-                printf("\n");
-            }
+//            for(int i=0; i<field->size_x; i++){
+//                for(int j=0; j<field->size_y; j++){
+//
+//                   printf("%d", field->on_tile[i][j]);
+//
+//                }
+//                printf("\n");
+//            }
         }
         else{
             control++;

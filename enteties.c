@@ -65,7 +65,7 @@ void Field_Update(Field *field){
         }
     }
 
-    //look for snakes position
+    //look for each snakes position
     for(int i=0; i<ENTETIES_MAX_SNAKES; i++){
 
         if(field->snakes_on_field[i] != 0){
@@ -75,11 +75,20 @@ void Field_Update(Field *field){
                 a = field->snakes_on_field[i]->tiles[j].y / field->tile_h;
                 b = field->snakes_on_field[i]->tiles[j].x / field->tile_w;
 
-                field->on_tile[a][b] = SNAKE;
+                field->on_tile[a+1][b+1] = SNAKE; //+1 because arrays are 0 indexed
+//                printf("j: %d= a: %d, b: %d - ", j, a,b);
 
             }
+//            printf("\n");
         }
     }
+
+
+    //look for walls
+
+
+    //look for food
+
 }
 
 

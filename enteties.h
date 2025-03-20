@@ -53,5 +53,6 @@ void Snake_Init(Snake *snake, Field *field);
 
 void Snake_Move(Snake *snake, int direction);
 
+int Snake_ColisionDetection(Snake *snake, int direction);
 
 #endif
