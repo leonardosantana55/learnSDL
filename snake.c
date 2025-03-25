@@ -199,6 +199,21 @@ void renderSnake(Snake *snake){
 }
 
 
+void renderWall(Wall *wall[], int size){
+
+    for(int i=0; i<size; i++){
+        for(int j=0; j<wall[i]->size; j++){
+
+            SDL_SetRenderDrawColor(gRenderer, 0x90, 0x30, 0xF0, 0xF0);
+            SDL_RenderFillRect(gRenderer, &wall[i]->tiles[j]);
+            SDL_SetRenderDrawColor(gRenderer, 0xF0, 0xF0, 0xF0, 0xF0);
+            SDL_RenderDrawRect(gRenderer, &wall[i]->tiles[j]);
+
+        }
+    }
+}
+
+
 int XMAIN(){
     initSDL();
     SDL_Event e;
@@ -217,6 +232,17 @@ int XMAIN(){
     }
     Snake_Init(snake, field);
 
+    Wall *outside_walls[4];
+    for (int i=0; i<4; i++){
+        outside_walls[i] = (Wall *)malloc(sizeof(Wall));
+        if(outside_walls[i] == NULL){
+            return -1;
+        }
+    }
+    Wall_Init(outside_walls[0], field, 32, 0, 0, HORIZONTAL);
+    Wall_Init(outside_walls[1], field, 32, 0, 31, HORIZONTAL);
+    Wall_Init(outside_walls[2], field, 32, 0, 0, VERTICAL);
+    Wall_Init(outside_walls[3], field, 32, 31, 0, VERTICAL);
 
     //init game utils
     Fps *fps = (Fps *)malloc(sizeof(Fps));
@@ -242,18 +268,19 @@ int XMAIN(){
         }
 
         //game logic
-        if(control > 60){
+        if(control > 15){
             Snake_Move(snake, DOWN);
             control = 0;
 
-//            for(int i=0; i<field->size_x; i++){
-//                for(int j=0; j<field->size_y; j++){
-//
-//                   printf("%d", field->on_tile[i][j]);
-//
-//                }
-//                printf("\n");
-//            }
+            for(int i=0; i<field->size_x; i++){
+                for(int j=0; j<field->size_y; j++){
+
+                   printf("%d ", field->on_tile[i][j]);
+
+                }
+                printf("\n");
+            }
+            printf("\n");
         }
         else{
             control++;
@@ -275,6 +302,7 @@ int XMAIN(){
         // render game elements
         renderField(field);
         renderSnake(snake);
+        renderWall(outside_walls, 4);
 
 
         //Update screen
@@ -294,4 +322,3 @@ int XMAIN(){
     return 0;
 }
 
-// TODO: criar função para mover snake

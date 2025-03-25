@@ -85,7 +85,22 @@ void Field_Update(Field *field){
 
 
     //look for walls
+    for(int i=0; i<ENTETIES_MAX_WALLS; i++){
 
+        if(field->walls_on_field[i] != 0){
+        
+            for(int j=0; j < field->walls_on_field[i]->size; j++){
+
+                a = field->walls_on_field[i]->tiles[j].y / field->tile_h;
+                b = field->walls_on_field[i]->tiles[j].x / field->tile_w;
+
+                field->on_tile[a][b] = WALL; //+1 because arrays are 0 indexed
+//                printf("j: %d= a: %d, b: %d - ", j, a,b);
+
+            }
+//            printf("\n");
+        }
+    }
 
     //look for food
 
@@ -97,6 +112,7 @@ void Snake_Init(Snake *snake, Field *field){
     snake->size = 3;
     snake->max_size = 10;
     snake->speed = 3;
+    snake->health = 1;
 
     snake->tile_x = field->tiles[field->size_x/2][field->size_x/2].x;    // the position of the snake depends on the coordinates of the field tiles
     snake->tile_y = field->tiles[field->size_y/2][field->size_y/2].y;
@@ -113,6 +129,7 @@ void Snake_Init(Snake *snake, Field *field){
     }
     
     //make comunication possible betwheen objects
+    //tell the field the address of the snakes on it
     snake->field = field;
 
     for(int i=0; i<ENTETIES_MAX_SNAKES; i++){
@@ -163,4 +180,56 @@ void Snake_Move(Snake *snake, int direction){
         temp_pre = snake->tiles[i+1];
 
     }
+}
+
+
+void Wall_Init(Wall *wall, Field *field, int size, int start_x, int start_y, int orientation){
+
+    wall->size = size;
+    wall->orientation = orientation;
+    wall->field = field;
+
+    wall->tile_x = field->tiles[start_y][start_x].x;    // the position of the wall depends on the coordinates of the field tiles
+    wall->tile_y = field->tiles[start_y][start_x].y;
+    wall->tile_w = field->tile_w;
+    wall->tile_h = field->tile_h;
+
+    for(int i=0; i<size; i++){
+
+        switch (orientation){
+
+            case HORIZONTAL:
+                wall->tiles[i].x = wall->tile_x + (wall->tile_w * i);
+                wall->tiles[i].y = wall->tile_y;
+                wall->tiles[i].w = wall->tile_w;
+                wall->tiles[i].h = wall->tile_h;
+                break;
+
+            case VERTICAL:
+                wall->tiles[i].x = wall->tile_x;
+                wall->tiles[i].y = wall->tile_y + (wall->tile_h * i);
+                wall->tiles[i].w = wall->tile_w;
+                wall->tiles[i].h = wall->tile_h;
+                break;
+
+            case DIAGONAL:
+
+                break;
+
+        }
+    }
+
+    //make comunication possible betwheen objects
+    //tell the field the address of the snakes on it
+    wall->field = field;
+
+    for(int i=0; i<ENTETIES_MAX_SNAKES; i++){
+
+        if(field->walls_on_field[i] == 0){
+            field->walls_on_field[i] = wall;
+            break;
+
+        }
+    }
+
 }

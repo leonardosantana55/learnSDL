@@ -2,12 +2,15 @@
 #define ENTETIES
 #define ENTETIES_SIZE 128
 #define ENTETIES_MAX_SNAKES 4
+#define ENTETIES_MAX_WALLS 16
 
 #include <SDL2/SDL.h>
 
 enum Direction {RIGHT, DOWN, LEFT, UP};
 
 enum Entetie_name {EMPTY, SNAKE, FOOD, WALL};
+
+enum Orientation {HORIZONTAL, VERTICAL, DIAGONAL};
 
 typedef struct Field_{
 
@@ -27,6 +30,8 @@ typedef struct Field_{
     //hold the address for each snake inside the field
     struct Snake_ *snakes_on_field[ENTETIES_MAX_SNAKES];
 
+    struct Wall_ *walls_on_field[ENTETIES_MAX_WALLS];
+
 } Field;
 
 typedef struct Snake_{
@@ -34,6 +39,7 @@ typedef struct Snake_{
     int size;
     int max_size;
     int speed;
+    int health;
 
     int tile_x; // starting position
     int tile_y; // starting position
@@ -45,6 +51,21 @@ typedef struct Snake_{
 
 } Snake;
 
+typedef struct Wall_{
+
+    int size;
+    int orientation;
+
+    int tile_x; // starting position
+    int tile_y; // starting position
+    int tile_w;
+    int tile_h;
+
+    SDL_Rect tiles[ENTETIES_SIZE];
+    Field *field;
+
+} Wall;
+
 void Field_Init(Field *field, int size_x, int size_y);
 
 void Field_Update(Field *field);
@@ -52,6 +73,8 @@ void Field_Update(Field *field);
 void Snake_Init(Snake *snake, Field *field);
 
 void Snake_Move(Snake *snake, int direction);
+
+void Wall_Init(Wall *wall, Field *field, int size, int start_x, int start_y, int orientation);
 
 int Snake_ColisionDetection(Snake *snake, int direction);
 
