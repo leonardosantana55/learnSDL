@@ -252,12 +252,12 @@ int XMAIN(){
     Fps_Init(fps);
 
     int control = 0; // quick hack
+    bool prin = false;
 
 
     // main loop
     bool quit = false;
     while(!quit){
-//        Uint32 ticks_start = SDL_GetTicks();
         fps->time_start = SDL_GetTicks();
 
 
@@ -268,9 +268,19 @@ int XMAIN(){
         }
 
         //game logic
-        if(control > 15){
+        if(control > 60){
             Snake_Move(snake, DOWN);
             control = 0;
+            prin = true;
+
+        }
+        else{
+            control++;
+        }
+
+        Field_Update(field);
+
+        if(prin){
 
             for(int i=0; i<field->size_x; i++){
                 for(int j=0; j<field->size_y; j++){
@@ -281,18 +291,10 @@ int XMAIN(){
                 printf("\n");
             }
             printf("\n");
+            prin = false;
+
         }
-        else{
-            control++;
-        }
 
-        Field_Update(field);
-
-
-//        int a = field->snakes_on_field[0]->tiles[1].y / field->tile_h;
-//        int b = field->snakes_on_field[0]->tiles[1].x / field->tile_w;
-//        printf("a: %d, b: %d\n", a,b);
-//        printf("%d", field->on_tile[a][b]);
 
         //Clear screen
         SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0x00 );
@@ -310,7 +312,6 @@ int XMAIN(){
 
 
         // control frame rate
-
         Fps_Measure(fps);
 //        printf("fps: %.2f\n", fps->fps);
 

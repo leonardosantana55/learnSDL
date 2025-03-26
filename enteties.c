@@ -75,7 +75,7 @@ void Field_Update(Field *field){
                 a = field->snakes_on_field[i]->tiles[j].y / field->tile_h;
                 b = field->snakes_on_field[i]->tiles[j].x / field->tile_w;
 
-                field->on_tile[a+1][b+1] = SNAKE; //+1 because arrays are 0 indexed
+                field->on_tile[a][b] = SNAKE;
 //                printf("j: %d= a: %d, b: %d - ", j, a,b);
 
             }
@@ -88,13 +88,13 @@ void Field_Update(Field *field){
     for(int i=0; i<ENTETIES_MAX_WALLS; i++){
 
         if(field->walls_on_field[i] != 0){
-        
+
             for(int j=0; j < field->walls_on_field[i]->size; j++){
 
                 a = field->walls_on_field[i]->tiles[j].y / field->tile_h;
                 b = field->walls_on_field[i]->tiles[j].x / field->tile_w;
 
-                field->on_tile[a][b] = WALL; //+1 because arrays are 0 indexed
+                field->on_tile[a][b] = WALL;
 //                printf("j: %d= a: %d, b: %d - ", j, a,b);
 
             }
@@ -114,8 +114,10 @@ void Snake_Init(Snake *snake, Field *field){
     snake->speed = 3;
     snake->health = 1;
 
-    snake->tile_x = field->tiles[field->size_x/2][field->size_x/2].x;    // the position of the snake depends on the coordinates of the field tiles
-    snake->tile_y = field->tiles[field->size_y/2][field->size_y/2].y;
+//    snake->tile_x = field->tiles[field->size_x/2][field->size_x/2].x;    // the position of the snake depends on the coordinates of the field tiles
+//    snake->tile_y = field->tiles[field->size_y/2][field->size_y/2].y;
+    snake->tile_x = field->tiles[1][30].x;    // the position of the snake depends on the coordinates of the field tiles
+    snake->tile_y = field->tiles[1][30].y;
     snake->tile_w = field->tile_w;
     snake->tile_h = field->tile_h;
 
