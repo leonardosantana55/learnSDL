@@ -29,8 +29,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <math.h>
 
-#include "enteties.c" //change to ententies.H
-#include "utils.c"
+#include "enteties.h" //change to ententies.H
+#include "utils.h"
 
 // its a breeze building this program on linux or windows 
 #ifdef _WIN32

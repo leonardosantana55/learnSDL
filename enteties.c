@@ -150,7 +150,6 @@ void Snake_Move(Snake *snake, int direction){
     int colision = colisionDetection(snake->field, snake->tiles[0].x, snake->tiles[0].y, direction);
 
     if (colision == WALL){
-        printf("bateu na parede!\n");
         return;
     }
 
