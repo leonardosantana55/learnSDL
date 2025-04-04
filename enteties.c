@@ -114,8 +114,6 @@ void Snake_Init(Snake *snake, Field *field){
     snake->speed = 3;
     snake->health = 1;
 
-//    snake->tile_x = field->tiles[field->size_x/2][field->size_x/2].x;    // the position of the snake depends on the coordinates of the field tiles
-//    snake->tile_y = field->tiles[field->size_y/2][field->size_y/2].y;
     snake->tile_x = field->tiles[1][30].x;    // the position of the snake depends on the coordinates of the field tiles
     snake->tile_y = field->tiles[1][30].y;
     snake->tile_w = field->tile_w;
@@ -131,7 +129,7 @@ void Snake_Init(Snake *snake, Field *field){
     }
     
     //make comunication possible betwheen objects
-    //tell the field the address of the snakes on it
+    //the snake being initiated tells its address to the field
     snake->field = field;
 
     for(int i=0; i<ENTETIES_MAX_SNAKES; i++){
@@ -147,13 +145,20 @@ void Snake_Init(Snake *snake, Field *field){
 
 
 void Snake_Move(Snake *snake, int direction){
+    //move the head of the snake and copy the previous tile to the old head position and so on
+
+    int colision = colisionDetection(snake->field, snake->tiles[0].x, snake->tiles[0].y, direction);
+
+    if (colision == WALL){
+        printf("bateu na parede!\n");
+        return;
+    }
 
     SDL_Rect temp_pre = snake->tiles[1];
     SDL_Rect temp = snake->tiles[0];
 
     switch(direction){
         //TODO: add colision detection
-        //move the head of the snake and copy the previous tile to the old head position and so on
 
         case RIGHT:
             snake->tiles[0].x += snake->tile_w;
@@ -225,7 +230,7 @@ void Wall_Init(Wall *wall, Field *field, int size, int start_x, int start_y, int
     //tell the field the address of the snakes on it
     wall->field = field;
 
-    for(int i=0; i<ENTETIES_MAX_SNAKES; i++){
+    for(int i=0; i<ENTETIES_MAX_WALLS; i++){
 
         if(field->walls_on_field[i] == 0){
             field->walls_on_field[i] = wall;
@@ -234,4 +239,68 @@ void Wall_Init(Wall *wall, Field *field, int size, int start_x, int start_y, int
         }
     }
 
+}
+
+
+int colisionDetection(Field *field, int x, int y, int direction){
+    //gets x y pixel and uses division to get the a b index
+    int a = 0;
+    int b = 0;
+
+    switch(direction){
+
+//        case RIGHT:
+//            a = (x + field->tile_w) / field->tile_w;
+//            b = y / field->tile_w;
+//            break;
+//
+//        case DOWN:
+//            a = x / field->tile_h;
+//            b = (y + field->tile_h) / field->tile_w;
+//            break;
+//
+//        case LEFT:
+//            a = (x - field->tile_w) / field->tile_h;
+//            b = y / field->tile_w;
+//            break;
+//
+//        case UP:
+//            snake->tiles[0].y -= snake->tile_h;
+//            a = x / field->tile_h;
+//            b = (y - field->tile_h) / field->tile_h;
+//            break;
+//
+//        default:
+//            a = x / field->tile_h;
+//            b = y / field->tile_w;
+//            break;
+//    }
+
+        case RIGHT:
+            a = (x / field->tile_h) + 1;
+            b = y / field->tile_w;
+            break;
+
+        case DOWN:
+            a = x / field->tile_h;
+            b = (y / field->tile_w) + 1;
+            break;
+
+        case LEFT:
+            a = (x / field->tile_h) - 1;
+            b = y / field->tile_w;
+            break;
+
+        case UP:
+            a = x / field->tile_h;
+            b = (y / field->tile_w) - 1;
+            break;
+
+        default:
+            a = x / field->tile_h;
+            b = y / field->tile_w;
+            break;
+    }
+
+    return field->on_tile[a][b];
 }

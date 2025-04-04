@@ -25,11 +25,15 @@ typedef struct Field_{
     SDL_Rect tiles[ENTETIES_SIZE][ENTETIES_SIZE];
 
     //describe what enteti is on each tile
+    //the function Field_Update uses it mark the position of each enteti on the field
     int on_tile[ENTETIES_SIZE][ENTETIES_SIZE];
 
     //hold the address for each snake inside the field
+    //is populated when a snake is initiated
     struct Snake_ *snakes_on_field[ENTETIES_MAX_SNAKES];
 
+    //hold the address for each wall inside the field
+    //is populated when a wall is initiated
     struct Wall_ *walls_on_field[ENTETIES_MAX_WALLS];
 
 } Field;
@@ -76,6 +80,6 @@ void Snake_Move(Snake *snake, int direction);
 
 void Wall_Init(Wall *wall, Field *field, int size, int start_x, int start_y, int orientation);
 
-int Snake_ColisionDetection(Snake *snake, int direction);
+int colisionDetection(Field *field, int x, int y, int direction);
 
 #endif

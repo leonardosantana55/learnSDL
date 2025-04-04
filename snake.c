@@ -268,7 +268,7 @@ int XMAIN(){
         }
 
         //game logic
-        if(control > 60){
+        if(control > 10){
             Snake_Move(snake, DOWN);
             control = 0;
             prin = true;
@@ -323,3 +323,8 @@ int XMAIN(){
     return 0;
 }
 
+//TODO: colision detection
+//colorscheme
+//random position food generator
+//control logic
+//
